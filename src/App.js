@@ -19,6 +19,8 @@ class App extends Component {
     this.setState({form})
   };
 
+//window.open('https://mail.google.com/mail/?ui=2&view=cm&fs=1&tf=1&shva=1&to=genesisdaft@gmail.com&su=Invoice XXX&body=Hi Mariel&bcc=tavo@viv.com','Compose%20Gmail','status=no,directories=no,location=no,resizable=no,menubar=no,width=600,height=600,toolbar=no');
+
   render() {
     return (
       <Box className="App" width={1}>

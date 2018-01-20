@@ -20,7 +20,7 @@ class InvoiceDocument extends PureComponent {
           centerCost={data.centerCost}
           date={data.date}
         />
-        <InvoiceTable/>
+        <InvoiceTable services={data.services || []} />
         <InvoiceFooter
           name={data.name}
           address="Calle 15 Sur # 46 - 36, Mirador de Santa Maria 303"

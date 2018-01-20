@@ -28,7 +28,7 @@ form {
     padding: 10px 5px;
 }
 
-input {
+input, select {
     border: none;
     border-bottom: 1px solid black;
     background: transparent;
@@ -83,6 +83,31 @@ td.isMoney {
 
 th {
     text-align: center;
+}
+
+button {
+    font-size: 1.2em;
+    padding: 10px 30px;
+    border-radius: 5px;
+    outline: none;
+}
+button:hover {
+    cursor: pointer;
+    background: #505050;
+    color: white;
+}
+
+.ServiceItem {
+    border: 1px solid black;
+    background: #f9f9f9;
+}
+
+.ServiceItem > .delete {
+    font-size: 2.6em;
+    font-weight: bold;
+    cursor: pointer;
+    float: right;
+    color: #737373;
 }
 
 @media print {

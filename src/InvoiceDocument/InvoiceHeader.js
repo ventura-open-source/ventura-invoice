@@ -3,7 +3,7 @@ import { Flex, Box } from 'grid-styled';
 import format from 'date-fns/format';
 import getYear from 'date-fns/get_year';
 
-const currentDate = format(new Date(), 'DD/MMM/YYYY');
+export const currentDate = format(new Date(), 'DD/MMM/YYYY');
 
 const InvoiceHeader = (props) => {
   const { name, address, location, dniType, dni, invoiceNumber, centerCost, date } = props;
