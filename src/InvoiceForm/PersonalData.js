@@ -1,10 +1,10 @@
 import React from 'react';
-import { Flex, Box } from 'grid-styled';
+import { Box } from 'grid-styled';
 
 function PersonalData({ onChange, name, address, location, dniType, dni, cellphone }) {
   return ([
-    <Box width={1} p={1}>
-      <label for="name">Name</label>
+    <Box width={1} p={1} key="p1">
+      <label htmlFor="name">Name</label>
       <input
         type="text"
         name="name"
@@ -13,15 +13,15 @@ function PersonalData({ onChange, name, address, location, dniType, dni, cellpho
         style={{width: '300px'}}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="address">Address</label>
+    <Box width={1} p={1} key="p2">
+      <label htmlFor="address">Address</label>
       <input
         type="text"
         name="address"
         onChange={onChange}
         value={address}
       />
-      <label for="address">Location</label>
+      <label htmlFor="address">Location</label>
       <input
         type="text"
         placeholder="Medellin, Colombia"
@@ -30,8 +30,8 @@ function PersonalData({ onChange, name, address, location, dniType, dni, cellpho
         value={location}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="cellphone">Cellphone</label>
+    <Box width={1} p={1} key="p3">
+      <label htmlFor="cellphone">Cellphone</label>
       <input
         type="text"
         name="cellphone"
@@ -40,8 +40,8 @@ function PersonalData({ onChange, name, address, location, dniType, dni, cellpho
         style={{width: '250px'}}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="dniType">Dni Type</label>
+    <Box width={1} p={1} key="p4">
+      <label htmlFor="dniType">Dni Type</label>
       <input
         type="text"
         name="dniType"
@@ -50,7 +50,7 @@ function PersonalData({ onChange, name, address, location, dniType, dni, cellpho
         value={dniType}
         style={{width: '40px'}}
       />
-      <label for="dni">Dni</label>
+      <label htmlFor="dni">Dni</label>
       <input
         type="text"
         name="dni"

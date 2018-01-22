@@ -1,9 +1,11 @@
-import React, { Component, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import { Flex, Box } from 'grid-styled';
+import getYear from 'date-fns/get_year';
 import format from 'date-fns/format';
 import PersonalData from './PersonalData';
 import MonerayData from './MonetaryData';
 import ServicesAndPrices from './ServicesAndPrices';
+import { pad } from './../InvoiceDocument/InvoiceHeader';
 
 class InvoiceForm extends PureComponent {
 
@@ -19,18 +21,8 @@ class InvoiceForm extends PureComponent {
     bankName: '',
     date: '',
     services: [
-      {
-        type: 'salary', //salary
-        name: 'Service delivery in %month%',
-        amount: 1,
-        unitPrice: 0.0,
-      },
-      {
-        type: 'fee', //fee
-        name: 'Transaction fee',
-        amount: 1,
-        unitPrice: 0.0,
-      },
+      //type: 1  //salary
+      //type: 2 //fee
       //type: 3 //extra hours
       //type: 4 //share
       //type: 5 //bono
@@ -38,10 +30,13 @@ class InvoiceForm extends PureComponent {
     ],
   }
 
-  //https://api.fixer.io/latest
-
   componentDidMount() {
-    this.props.onChange(this.state);
+    const data = window.localStorage.getItem('data');
+    if(data !== null) {
+      this.setState(JSON.parse(data), () => {
+        this.props.onChange(this.state);
+      });
+    }
   }
 
   handleInput = ev => {
@@ -60,7 +55,9 @@ class InvoiceForm extends PureComponent {
 
     this.setState({
        services: [...this.state.services, item]
-    }, () => this.props.onChange(this.state));
+    }, () => {
+      this.props.onChange(this.state);
+    });
   };
 
   onRemoveItem = idx => {
@@ -68,6 +65,20 @@ class InvoiceForm extends PureComponent {
        services: this.state.services.filter((_, i) => i !== idx)
     }, () => this.props.onChange(this.state));
   };
+
+  saveToLocalStorage() {
+    window.localStorage.setItem('data', JSON.stringify(this.state))
+  }
+
+  onSend = (e) => {
+    e.preventDefault();
+    this.saveToLocalStorage();
+    const to = 'finance.assistant.de@gmail.com';
+    const subject = `Invoice ${pad(this.state.invoiceNumber, 2)}/${getYear(new Date()).toString().substr(2)} - ${this.state.name}`;
+    const bbc = 'gustavo.catano.viventura@gmail.com,ventura.product.manager@gmail.com';
+    const body = `Hi Mariel, I attach you my next invoice. Thank you in advance.`;
+    window.open(`https://mail.google.com/mail/?ui=2&view=cm&fs=1&tf=1&shva=1&to=${to}&su=${subject}&body=${body}&bcc=${bbc}`);
+  }
 
   render() {
     return (
@@ -106,6 +117,11 @@ class InvoiceForm extends PureComponent {
               services={this.state.services}
             />
           </Flex>
+          <hr />
+          <div style={{ textAlign: 'center'}}>
+            <button style={{ marginRight: '20px'}} onClick={() => window.print()}>1. Save PDF </button>
+            <button onClick={this.onSend}>2. Send to Mariel</button>
+          </div>
         </form>
       </Box>
     );

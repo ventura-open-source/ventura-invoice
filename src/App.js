@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react';
+import React, { Component } from 'react';
 import { Flex, Box } from 'grid-styled';
 import { hot } from 'react-hot-loader';
 import InvoiceDocument from './InvoiceDocument';
@@ -18,8 +18,6 @@ class App extends Component {
   onFormChange = form => {
     this.setState({form})
   };
-
-//window.open('https://mail.google.com/mail/?ui=2&view=cm&fs=1&tf=1&shva=1&to=genesisdaft@gmail.com&su=Invoice XXX&body=Hi Mariel&bcc=tavo@viv.com','Compose%20Gmail','status=no,directories=no,location=no,resizable=no,menubar=no,width=600,height=600,toolbar=no');
 
   render() {
     return (

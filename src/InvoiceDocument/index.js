@@ -1,10 +1,28 @@
 import React, { PureComponent } from 'react';
-import { Flex, Box } from 'grid-styled';
+import { Box } from 'grid-styled';
 import InvoiceHeader from './InvoiceHeader';
 import InvoiceTable from './InvoiceTable';
 import InvoiceFooter from './InvoiceFooter';
 
 class InvoiceDocument extends PureComponent {
+  state = { total: 0, services: []};
+
+  onTotal = v => this.setState({total: v});
+
+  calcTotal = services => {
+    let total = 0;
+    const rows = services.map(item => {
+      item.total = parseFloat(item.unitPrice * item.amount);
+      total = total + item.total;
+      return item;
+    });
+    this.setState({ total: total, services: rows });
+  }
+
+  componentWillReceiveProps(props) {
+    this.calcTotal(props.data.services);
+  }
+
   render() {
     const { data } = this.props;
 
@@ -20,7 +38,7 @@ class InvoiceDocument extends PureComponent {
           centerCost={data.centerCost}
           date={data.date}
         />
-        <InvoiceTable services={data.services || []} />
+        <InvoiceTable services={this.state.services || []} total={this.state.total}/>
         <InvoiceFooter
           name={data.name}
           address="Calle 15 Sur # 46 - 36, Mirador de Santa Maria 303"
@@ -30,6 +48,7 @@ class InvoiceDocument extends PureComponent {
           bankName={data.bankName}
           swift={data.swift}
           aba={data.aba}
+          total={this.state.total}
         />
       </Box>
     );

@@ -1,10 +1,10 @@
 import React from 'react';
-import { Flex, Box } from 'grid-styled';
+import { Box } from 'grid-styled';
 
 function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber, bankName, swift, aba }) {
   return ([
-    <Box width={1} p={1}>
-      <label for="centerCost">CenterCost</label>
+    <Box width={1} p={1} key="m1">
+      <label htmlFor="centerCost">CenterCost</label>
       <input
         type="text"
         name="centerCost"
@@ -12,7 +12,7 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         value={centerCost}
         style={{width: '60px'}}
       />
-      <label for="invoiceNumber">Invoice Number</label>
+      <label htmlFor="invoiceNumber">Invoice Number</label>
       <input
         type="number"
         name="invoiceNumber"
@@ -20,8 +20,8 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         value={invoiceNumber}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="date">Date</label>
+    <Box width={1} p={1} key="m2">
+      <label htmlFor="date">Date</label>
       <input
         type="date"
         name="date"
@@ -30,8 +30,8 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         style={{width: '150px'}}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="accountNumber">Account Number</label>
+    <Box width={1} p={1} key="m3">
+      <label htmlFor="accountNumber">Account Number</label>
       <input
         type="text"
         name="accountNumber"
@@ -39,7 +39,7 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         value={accountNumber}
         style={{width: '140px'}}
       />
-      <label for="bankName">Bank Name</label>
+      <label htmlFor="bankName">Bank Name</label>
       <input
         type="text"
         name="bankName"
@@ -48,8 +48,8 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         style={{width: '90px'}}
       />
     </Box>,
-    <Box width={1} p={1}>
-      <label for="swift">SWIFT Code</label>
+    <Box width={1} p={1} key="m4">
+      <label htmlFor="swift">SWIFT Code</label>
       <input
         type="text"
         name="swift"
@@ -57,7 +57,7 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
         value={swift}
         style={{width: '140px'}}
       />
-      <label for="aba">ABA Code</label>
+      <label htmlFor="aba">ABA Code</label>
       <input
         type="text"
         name="aba"

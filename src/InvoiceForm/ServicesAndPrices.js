@@ -7,7 +7,17 @@ class ServicesAndPrices extends PureComponent {
     name: '',
     amount: 1,
     unitPrice: 0.0,
+    dollarPrice: null,
   }
+
+  componentDidMount() {
+    fetch('https://api.fixer.io/latest')
+    .then(response => response.json())
+    .then(data => {
+      this.setState({ dollarPrice: data.rates['USD']});
+    });
+  }
+
 
   handleInput = ev => {
     const target = ev.target;
@@ -17,8 +27,10 @@ class ServicesAndPrices extends PureComponent {
   };
 
   addItem = () => {
-    let data = Object.assign({}, this.state);
-    data.unitPrice = parseFloat(data.unitPrice);
+    //exclude dollar conversion rate
+    const { dollarPrice, ...others } = this.state;
+    let data = Object.assign({}, others);
+    data.unitPrice = dollarPrice * parseFloat(data.unitPrice);
     this.props.onAddItem(data);
   };
 
@@ -27,8 +39,8 @@ class ServicesAndPrices extends PureComponent {
     return (
       <Flex wrap={true}>
         {services.map((item, i) => (
-          <Box width={1} m={1}  p={2} className="ServiceItem">
-            {item.type} - {item.amount} units - {item.unitPrice.toLocaleString()} EUR
+          <Box width={1} m={1}  p={2} className="ServiceItem" key={i}>
+            {item.type} - {item.amount} units - {item.unitPrice.toLocaleString()} USD
             <span className="delete" title="remove" onClick={() => onRemoveItem(i)}>x</span>
           </Box>
         ))}
@@ -39,10 +51,14 @@ class ServicesAndPrices extends PureComponent {
   render() {
     const { services } = this.props;
 
+    if(!this.state.dollarPrice) {
+      return "Fetch currency conversion rate for today..."
+    }
+
     return (
       <Flex wrap={true}>
         <Box width={1} p={1}>
-          <label for="type">Type</label>
+          <label htmlFor="type">Type</label>
           <select name="type" value={this.state.type} onChange={this.handleInput} style={{ width: '110px'}}>
             <option value="salary">Salary</option>
             <option value="fee">Transaction Fee</option>
@@ -51,7 +67,7 @@ class ServicesAndPrices extends PureComponent {
             <option value="bono">Bono</option>
             <option value="discount">Discount</option>
           </select>
-          <label for="unitPrice">Unit price (EUR)</label>
+          <label htmlFor="unitPrice">Unit price (EUR)</label>
           <input
             type="text"
             name="unitPrice"
@@ -59,7 +75,7 @@ class ServicesAndPrices extends PureComponent {
             onChange={this.handleInput}
             style={{width: '50px'}}
           />
-          <label for="amount">Unit price</label>
+          <label htmlFor="amount">Unit price</label>
           <input
             type="number"
             name="amount"
@@ -72,6 +88,9 @@ class ServicesAndPrices extends PureComponent {
           <button type="button" onClick={this.addItem}>Add +</button>
         </Box>
         <Box width={1} p={2} mt={1}>
+          <small>
+            * Conversion rate EUR - USD for today is: <b>{this.state.dollarPrice}</b>
+          </small><br/><br/>
           {this.renderServices(services)}
         </Box>
       </Flex>

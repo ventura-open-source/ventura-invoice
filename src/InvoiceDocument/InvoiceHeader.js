@@ -5,9 +5,15 @@ import getYear from 'date-fns/get_year';
 
 export const currentDate = format(new Date(), 'DD/MMM/YYYY');
 
+export const pad = (num, size) => {
+    var s = num+"";
+    while (s.length < size) s = "0" + s;
+    return s;
+}
+
 const InvoiceHeader = (props) => {
   const { name, address, location, dniType, dni, invoiceNumber, centerCost, date } = props;
-  const invoiceId = `${invoiceNumber}/${getYear(currentDate)}`
+  const invoiceId = `${pad(invoiceNumber,2)}/${getYear(currentDate).toString().substr(2)}`
 
   return (
     <Flex align="flex-end" className="InvoiceHeader" wrap={true}>

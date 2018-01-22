@@ -2,11 +2,11 @@ import React from 'react';
 import { Flex, Box } from 'grid-styled';
 
 const InvoiceFooter = (props) => {
-  const { name, cellphone, address, location, accountNumber, bankName, swift, aba } = props;
+  const { name, cellphone, address, location, accountNumber, bankName, swift, aba, total } = props;
   return (
     <Flex align="flex-start" className="InvoiceFooter" wrap={true}>
       <Box width={1}>
-        <p>Please make the transfer of the <strong>2.216,35 USD </strong>
+        <p>Please make the transfer of the <strong>{total.toFixed(2)} USD </strong>
           to my bank account with the following data:
         </p>
         <br/>
