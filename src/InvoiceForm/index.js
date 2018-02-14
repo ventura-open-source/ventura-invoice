@@ -27,6 +27,7 @@ class InvoiceForm extends PureComponent {
       //type: 4 //share
       //type: 5 //bono
       //type: 6 //discount
+      //type: 7 //custom
     ],
   }
 

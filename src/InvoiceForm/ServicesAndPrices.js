@@ -66,7 +66,22 @@ class ServicesAndPrices extends PureComponent {
             <option value="share">Share</option>
             <option value="bono">Bono</option>
             <option value="discount">Discount</option>
+            <option value="custom">Custom</option>
           </select>
+          {
+            this.state.type === "custom" && (
+              <div>
+                <label htmlFor="name">Title</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={this.state.customName}
+                  onChange={this.handleInput}
+                  style={{width: '150px'}}
+                />
+              </div>
+            )
+          }
           <label htmlFor="unitPrice">Unit price (EUR)</label>
           <input
             type="text"
