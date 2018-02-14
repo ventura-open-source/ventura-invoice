@@ -29,9 +29,9 @@ const InvoiceTable = ({ services, total }) => {
             {services.map(item => (
               <tr key={makeid()}>
                 <td>{item.name}</td>
-                <td className="isMoney">{item.unitPrice.toFixed(2).toLocaleString()} USD</td>
+                <td className="isMoney">{item.unitPrice.toFixed(2).toLocaleString()} {item.targetCurrency || item.currency}</td>
                 <td className="isMoney">{item.amount}</td>
-                <td className="isMoney">{item.total.toFixed(2).toLocaleString()} USD</td>
+                <td className="isMoney">{item.total.toFixed(2).toLocaleString()} {item.targetCurrency || item.currency}</td>
               </tr>
             )) }
             <tr>

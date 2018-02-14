@@ -14,7 +14,7 @@ function MonerayData({ onChange, centerCost, invoiceNumber, date, accountNumber,
       />
       <label htmlFor="invoiceNumber">Invoice Number</label>
       <input
-        type="number"
+        type="text"
         name="invoiceNumber"
         onChange={onChange}
         value={invoiceNumber}

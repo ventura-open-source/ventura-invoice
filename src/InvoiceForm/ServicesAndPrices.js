@@ -4,33 +4,65 @@ import { Flex, Box } from 'grid-styled';
 class ServicesAndPrices extends PureComponent {
   state = {
     type: 'salary',
+    currency: 'EUR',
+    targetCurrency: 'USD',
     name: '',
     amount: 1,
     unitPrice: 0.0,
     dollarPrice: null,
+    autoConvert: true,
   }
 
   componentDidMount() {
-    fetch('https://api.fixer.io/latest')
+    if(this.state.autoConvert) {
+      this.fetchRates();
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(
+        (
+          prevState.currency !== this.state.currency ||
+          prevState.targetCurrency !== this.state.targetCurrency
+        )
+        && this.state.currency !== this.state.targetCurrency
+        && this.state.currency !== "COP"
+        && this.state.targetCurrency !== "COP"
+    ) {
+      this.fetchRates();
+    }
+    if(this.state.targetCurrency === "COP" || this.state.currency === "COP") {
+      this.setState({ autoConvert: false, currency: "COP", targetCurrency: "COP" });
+    }
+  }
+
+  fetchRates() {
+    fetch('https://api.fixer.io/latest?base='+this.state.currency)
     .then(response => response.json())
     .then(data => {
-      this.setState({ dollarPrice: data.rates['USD']});
+      this.setState({ dollarPrice: data.rates[this.state.targetCurrency]});
     });
   }
 
 
   handleInput = ev => {
     const target = ev.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
     this.setState({
-      [target.name] : target.value
+      [target.name] : value
     });
   };
 
   addItem = () => {
     //exclude dollar conversion rate
-    const { dollarPrice, ...others } = this.state;
+    const { dollarPrice, autoConvert, ...others } = this.state;
     let data = Object.assign({}, others);
-    data.unitPrice = dollarPrice * parseFloat(data.unitPrice);
+    if(autoConvert) {
+      data.unitPrice = dollarPrice * parseFloat(data.unitPrice);
+    } else {
+      data.targetCurrency = data.currency;
+      data.unitPrice = parseFloat(data.unitPrice);
+    }
     this.props.onAddItem(data);
   };
 
@@ -40,7 +72,7 @@ class ServicesAndPrices extends PureComponent {
       <Flex wrap={true}>
         {services.map((item, i) => (
           <Box width={1} m={1}  p={2} className="ServiceItem" key={i}>
-            {item.type} - {item.amount} units - {item.unitPrice.toLocaleString()} USD
+            {item.type} - {item.amount} units - {item.unitPrice.toLocaleString()} {item.targetCurrency}
             <span className="delete" title="remove" onClick={() => onRemoveItem(i)}>x</span>
           </Box>
         ))}
@@ -51,12 +83,42 @@ class ServicesAndPrices extends PureComponent {
   render() {
     const { services } = this.props;
 
-    if(!this.state.dollarPrice) {
-      return "Fetch currency conversion rate for today..."
-    }
-
     return (
       <Flex wrap={true}>
+        <Box width={1} p={1}>
+          <label htmlFor="currency">Currency</label>
+          <select name="currency" value={this.state.currency}
+            onChange={this.handleInput} style={{ width: '110px'}}>
+            <option value="EUR">EUR</option>
+            <option value="USD">USD</option>
+            <option value="COP">COP</option>
+          </select>
+          { (this.state.targetCurrency !== "COP" || this.state.currency !== "COP") && (
+            <div>
+              <label htmlFor="autoConvert">Automatic apply exchange rate</label>
+              <input
+                type="checkbox"
+                name="autoConvert"
+                checked={this.state.autoConvert}
+                onChange={this.handleInput}
+                style={{width: '50px'}}
+              />
+            </div>
+          )}
+          {
+            this.state.autoConvert && (
+              <div>
+                <label htmlFor="targetCurrency">To</label>
+                <select name="targetCurrency" value={this.state.targetCurrency}
+                  onChange={this.handleInput} style={{ width: '110px'}}>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                  <option value="COP">COP</option>
+                </select>
+              </div>
+            )
+          }
+        </Box>
         <Box width={1} p={1}>
           <label htmlFor="type">Type</label>
           <select name="type" value={this.state.type} onChange={this.handleInput} style={{ width: '110px'}}>
@@ -82,7 +144,7 @@ class ServicesAndPrices extends PureComponent {
               </div>
             )
           }
-          <label htmlFor="unitPrice">Unit price (EUR)</label>
+          <label htmlFor="unitPrice">Unit price ({this.state.currency})</label>
           <input
             type="text"
             name="unitPrice"
@@ -103,9 +165,12 @@ class ServicesAndPrices extends PureComponent {
           <button type="button" onClick={this.addItem}>Add +</button>
         </Box>
         <Box width={1} p={2} mt={1}>
-          <small>
-            * Conversion rate EUR - USD for today is: <b>{this.state.dollarPrice}</b>
-          </small><br/><br/>
+          { this.state.autoConvert &&
+            <small>
+              * Conversion rate {this.state.currency} - {this.state.targetCurrency} for today is: <b>{this.state.dollarPrice}</b>
+            </small>
+          }
+          <br/><br/>
           {this.renderServices(services)}
         </Box>
       </Flex>
