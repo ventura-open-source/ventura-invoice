@@ -15,6 +15,7 @@ class InvoiceForm extends PureComponent {
     location: 'Envigado, Colombia',
     dniType: 'C.C',
     dni: '',
+    cellphone: '',
     centerCost: '24551',
     invoiceNumber: 1,
     accountNumber: '',
@@ -39,6 +40,8 @@ class InvoiceForm extends PureComponent {
       });
     }
   }
+
+  componentDidUpdate() { this.saveToLocalStorage(); }
 
   handleInput = ev => {
     const target = ev.target;
@@ -72,12 +75,12 @@ class InvoiceForm extends PureComponent {
   }
 
   onSend = (e) => {
+    console.log(this.state);
     e.preventDefault();
-    this.saveToLocalStorage();
-    const to = 'finance.assistant.de@gmail.com';
+    const to = 'alfredo.ortegon.viventura@gmail.com';
     const subject = `Invoice ${pad(this.state.invoiceNumber, 2)}/${getYear(new Date()).toString().substr(2)} - ${this.state.name}`;
-    const bbc = 'gustavo.catano.viventura@gmail.com,ventura.product.manager@gmail.com';
-    const body = `Hi Mariel, I attach you my next invoice. Thank you in advance.`;
+    const bbc = 'ventura.product.manager@gmail.com';
+    const body = `Hi Alfredo, I attach you my next invoice. Thank you in advance.`;
     window.open(`https://mail.google.com/mail/?ui=2&view=cm&fs=1&tf=1&shva=1&to=${to}&su=${subject}&body=${body}&bcc=${bbc}`);
   }
 
@@ -120,8 +123,8 @@ class InvoiceForm extends PureComponent {
           </Flex>
           <hr />
           <div style={{ textAlign: 'center'}}>
-            <button style={{ marginRight: '20px'}} onClick={() => window.print()}>1. Save PDF </button>
-            <button onClick={this.onSend}>2. Send to Mariel</button>
+            <button type="button" style={{ marginRight: '20px'}} onClick={() => window.print()}>1. Save PDF </button>
+            <button type="button" onClick={this.onSend}>2. Send to Fredo</button>
           </div>
         </form>
       </Box>
