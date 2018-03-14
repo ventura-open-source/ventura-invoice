@@ -5,7 +5,6 @@ import format from 'date-fns/format';
 import PersonalData from './PersonalData';
 import MonerayData from './MonetaryData';
 import ServicesAndPrices from './ServicesAndPrices';
-import { pad } from './../InvoiceDocument/InvoiceHeader';
 
 class InvoiceForm extends PureComponent {
 
@@ -35,13 +34,19 @@ class InvoiceForm extends PureComponent {
   componentDidMount() {
     const data = window.localStorage.getItem('data');
     if(data !== null) {
-      this.setState(JSON.parse(data), () => {
+      const initialState = this.updateDates(JSON.parse(data));
+      this.setState(initialState, () => {
         this.props.onChange(this.state);
       });
     }
   }
 
-  componentDidUpdate() { this.saveToLocalStorage(); }
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.date !== this.state.date) {
+      this.updateDates(this.state, this.state.date);
+    }
+    this.saveToLocalStorage();
+  }
 
   handleInput = ev => {
     const target = ev.target;
@@ -50,9 +55,21 @@ class InvoiceForm extends PureComponent {
     }, () => this.props.onChange(this.state));
   };
 
+  updateDates = (data, date) => {
+    const result = Object.assign({}, data);
+    result.date = date ? new Date(date) : new Date();
+    result.services.forEach(i => {
+      if(i.type === "salary") {
+        const month = format(result.date, 'MMMM');
+        i.name = "Services delivery in " + month;
+      }
+    })
+    return  result;
+  }
+
   onAddItem = item => {
     if(item.type === "salary") {
-      const month = this.props.date ? format(this.props.date, 'MMMM') : format(new Date(), 'MMMM');
+      const month = this.state.date ? format(this.state.date, 'MMMM') : format(new Date(), 'MMMM');
       item.name = "Services delivery in " + month;
     }
     if(item.type === "fee") { item.name = "Transaction fee"; }
@@ -78,7 +95,7 @@ class InvoiceForm extends PureComponent {
     console.log(this.state);
     e.preventDefault();
     const to = 'alfredo.ortegon.viventura@gmail.com';
-    const subject = `Invoice ${pad(this.state.invoiceNumber, 2)}/${getYear(new Date()).toString().substr(2)} - ${this.state.name}`;
+    const subject = `Invoice ${this.state.invoiceNumber} - ${this.state.name}`;
     const bbc = 'ventura.product.manager@gmail.com';
     const body = `Hi Alfredo, I attach you my next invoice. Thank you in advance.`;
     window.open(`https://mail.google.com/mail/?ui=2&view=cm&fs=1&tf=1&shva=1&to=${to}&su=${subject}&body=${body}&bcc=${bbc}`);
