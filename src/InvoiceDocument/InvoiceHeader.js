@@ -5,12 +5,6 @@ import format from 'date-fns/format';
 
 export const currentDate = format(new Date(), 'DD/MMM/YYYY');
 
-export const pad = (num, size) => {
-    var s = num+"";
-    while (s.length < size) s = "0" + s;
-    return s;
-}
-
 const InvoiceHeader = (props) => {
   const { name, address, location, dniType, dni, invoiceNumber, centerCost, date } = props;
 

@@ -1,58 +1,47 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Box } from 'grid-styled';
 import InvoiceHeader from './InvoiceHeader';
 import InvoiceTable from './InvoiceTable';
 import InvoiceFooter from './InvoiceFooter';
+import { AppContext } from './../AppContext';
 
-class InvoiceDocument extends PureComponent {
-  state = { total: 0, services: []};
+const { Consumer } = AppContext;
 
-  onTotal = v => this.setState({total: v});
+function InvoiceDocument() {
 
-  calcTotal = services => {
-    let total = 0;
-    const rows = services.map(item => {
-      item.total = parseFloat(item.unitPrice * item.amount);
-      total = total + item.total;
-      return item;
-    });
-    this.setState({ total: total, services: rows });
-  }
-
-  componentWillReceiveProps(props) {
-    this.calcTotal(props.data.services);
-  }
-
-  render() {
-    const { data } = this.props;
-
-    return (
-      <Box className="InvoiceDocument" width={[1,1,3/5]} p="1in" m={1}>
-        <InvoiceHeader
-          name={data.name}
-          address={data.address}
-          location={data.location}
-          dniType={data.dniType}
-          dni={data.dni}
-          invoiceNumber={data.invoiceNumber}
-          centerCost={data.centerCost}
-          date={data.date}
-        />
-        <InvoiceTable services={this.state.services || []} total={this.state.total}/>
-        <InvoiceFooter
-          name={data.name}
-          address="Calle 15 Sur # 46 - 36, Mirador de Santa Maria 303"
-          location="Medellin, Colombia"
-          cellphone={data.cellphone}
-          accountNumber={data.accountNumber}
-          bankName={data.bankName}
-          swift={data.swift}
-          aba={data.aba}
-          total={this.state.total}
-        />
-      </Box>
-    );
-  }
+  return (
+    <Consumer>
+      { form => (
+        <Box className="InvoiceDocument" width={[1,1,3/5]} p="1in" m={1}>
+          <InvoiceHeader
+            name={form.name}
+            address={form.address}
+            location={form.location}
+            dniType={form.dniType}
+            dni={form.dni}
+            invoiceNumber={form.invoiceNumber}
+            centerCost={form.centerCost}
+            date={form.date}
+          />
+          <InvoiceTable
+            services={form.services || []}
+            total={form.total}
+          />
+          <InvoiceFooter
+            name={form.name}
+            address={form.officeAddress}
+            location={form.officeLocation}
+            cellphone={form.cellphone}
+            accountNumber={form.accountNumber}
+            bankName={form.bankName}
+            swift={form.swift}
+            aba={form.aba}
+            total={form.total}
+          />
+        </Box>
+      )}
+    </Consumer>
+  );
 }
 
 export default InvoiceDocument;

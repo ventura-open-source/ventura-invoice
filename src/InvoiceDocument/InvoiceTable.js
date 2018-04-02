@@ -1,15 +1,6 @@
 import React from 'react';
 import { Flex, Box } from 'grid-styled';
-
-function makeid() {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-  for (var i = 0; i < 5; i++)
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-  return text;
-}
+import { makeid } from './../utils';
 
 const InvoiceTable = ({ services, total }) => {
 
