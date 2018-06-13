@@ -18,7 +18,7 @@ const InvoiceHeader = (props) => {
       </Box>
       <Box width={1}>
         <p>ventura TRAVEL GmbH</p>
-        <p>Kottubesser Damm 103a, 10967 Berlin</p>
+        <p>Lausitzer Straße 31 in 10999 Berlin</p>
         <p>Center cost: {centerCost}</p>
         <p style={{textAlign: 'right'}}>Medellin, { date ? format(date, 'DD/MMM/YYYY') : currentDate}</p>
         <p>Invoice Nr: {invoiceNumber}</p>
