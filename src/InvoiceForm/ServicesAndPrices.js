@@ -37,7 +37,10 @@ class ServicesAndPrices extends PureComponent {
   }
 
   fetchRates() {
-    fetch('https://api.fixer.io/latest?base='+this.state.currency)
+    const key = '659cb686925351ee3e30691f7f0fb8a0';
+    const baseUrl = 'http://data.fixer.io/api/latest';
+
+    fetch(`${baseUrl}?base=${this.state.currency}&access_key=${key}`)
     .then(response => response.json())
     .then(data => {
       this.setState({ dollarPrice: data.rates[this.state.targetCurrency]});
